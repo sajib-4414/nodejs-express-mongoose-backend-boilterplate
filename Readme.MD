@@ -22,6 +22,8 @@ Look at the package.json to know which version is it.
 * Cookie parsing, and cookie based authentication with token(TODO)
 * CORS
 * dotenv to load .env file with variables
+* Linting packages (TODO)
+* Background worker package such as bulljs(TODO)
 
 ### Strcutures used
 
