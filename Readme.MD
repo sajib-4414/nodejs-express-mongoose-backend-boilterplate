@@ -24,6 +24,7 @@ Look at the package.json to know which version is it.
 * dotenv to load .env file with variables
 * Linting packages (TODO)
 * Background worker package such as bulljs(TODO)
+* Logging tools(TODO)
 
 ### Strcutures used
 
