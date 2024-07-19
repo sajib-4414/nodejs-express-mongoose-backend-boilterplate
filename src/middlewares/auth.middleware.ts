@@ -3,6 +3,15 @@ import { NotAuthenticatedError } from "../types/error_classes";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { User } from "../models/user.models";
 
+// This is a global namespace modification, so any request will be modified and will have set a currentUser
+declare global {
+    namespace Express {
+      interface Request {
+        user: IUser;
+      }
+    }
+}
+
 export const authorizedRequest = async(req:any, res:Response, next:NextFunction)=>{
     let token:any;
     if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')){
