@@ -100,7 +100,7 @@ will be added soon.
 
 ### Add a middlware for authenticated request and have req.user
 ```
-# in auth.middleware.js
+# in auth.middleware.ts
 
 // This is a global namespace modification, so any request will be modified and will have set a currentUser
 THis is done such as Typescript understands there is user in request object
