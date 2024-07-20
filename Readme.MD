@@ -97,3 +97,61 @@ will be added soon.
 
 ### How to create a mongoose model in a standard way
 will be added soon.
+
+### Add a middlware for authenticated request and have req.user
+```
+# in auth.middleware.js
+
+// This is a global namespace modification, so any request will be modified and will have set a currentUser
+THis is done such as Typescript understands there is user in request object
+declare global {
+    namespace Express {
+      interface Request {
+        user: IUser;
+      }
+    }
+}
+export const authorizedRequest = async(req:Request, res:Response, next:NextFunction)=>{
+    let token:any;
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')){
+        //set token from bearer token in header
+        token = req.headers.authorization.split(' ')[1];
+    }
+    //if the token is sent via cookie
+    else if (req.cookies.token){
+        token = req.cookies.token
+    }
+
+    //Make sure token is a non empty non null one
+    if(token === undefined || !token)
+        throw new NotAuthenticatedError('Not authenticated...')
+    try{
+        //verify the token
+        const decoded:JwtPayload = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload
+        console.log(decoded)
+        const user = await User.findById(decoded.id)
+        if (user)
+            req.user = user
+        next()
+    }
+    catch(err){
+        console.log(err)
+        throw new NotAuthenticatedError('Not authenticated...')
+    }
+}
+```
+
+Now in the routes definition
+```
+router.post('/add-socket', authorizedRequest, controllerName)
+```
+
+in the controller,
+```
+import {  Request, Response } from "express";
+export const joinAllRooms = async(req:Request, res:Response)=>{
+    ....
+    await someMethod(req.user, socketId) # req.user can be accessed
+    ....
+}
+```
