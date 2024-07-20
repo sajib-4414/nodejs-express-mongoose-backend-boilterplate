@@ -167,3 +167,18 @@ app.use(express.json({limit:"16kb"}))
 //16kb  is the payload limit
 app.use(express.urlencoded({extended:true, limit:"16kb"}))
 ```
+
+### How to use dotenv to use variables from .env files
+- install `dotenv`
+- have a file in the project named .env
+- the .env file should not contain any spaces, for string use quote notation. example of a .env file
+`JWT_SECRET='1234'`
+- in the file where want to use variables with `process.env`
+do this
+```
+import dotenv from 'dotenv'
+dotenv.config(); //you can optionally give path, if your .env is not in the **project** root.
+console.log(process.env.JWT_SECRET)
+```
+There should be a way to load the dotenv load globally such that we dont have to use `dotenv()` in all files
+where we want to use `env` variables. I will post it later.
