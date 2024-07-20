@@ -182,3 +182,19 @@ console.log(process.env.JWT_SECRET)
 ```
 There should be a way to load the dotenv load globally such that we dont have to use `dotenv()` in all files
 where we want to use `env` variables. I will post it later.
+
+### Professionally connecting to MongoDB
+We should start the express server only if the database connection is successful. in app.ts
+```
+connectToMongoDB()
+.then(() => {
+    app.listen(PORT, () => {
+        console.log('HTTP server is running at port 3001');
+    });
+})
+.catch((error) => {
+    console.error('Error connecting to mongodb, server exiting');
+    console.error(error);
+    process.exit(1);
+});
+```
