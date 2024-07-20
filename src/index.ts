@@ -8,8 +8,14 @@ import { authRouter } from './routers/auth.routes';
 import { connectToMongoDB } from './config/db';
 const app = express()
 
-//parse JSON request body
-app.use(express.json())
+//parse JSON request body, maximum payload limit is 16kb, otherwise will throw error
+app.use(express.json({limit:"16kb"}))
+
+//lets also support url encoded paramters, we can do that from postman
+//This option allows for rich objects and arrays to be parsed. Without this, 
+//nested objects and arrays might not be parsed correctly.
+//16kb  is the payload limit
+app.use(express.urlencoded({extended:true, limit:"16kb"}))
 
 
 
