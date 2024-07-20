@@ -18,11 +18,6 @@ app.use(express.json({limit:"16kb"}))
 app.use(express.urlencoded({extended:true, limit:"16kb"}))
 
 
-
-//connect to mongodb
-connectToMongoDB()
-
-
 const cors = require('cors')
 app.use(cors())//using default settings, CORS-> Allow all server
 
@@ -40,8 +35,19 @@ app.use('/api',router)
 //that intercept any error that happens in the request response cycle
 app.use(globalErrorHandler)
 
+const PORT = process.env.PORT || 3001;
 
-
-app.listen(3001, ()=>{
-    console.log('http server is running at 3001 port')
+//this returns a promise. unless we are waiting with await, execution will not wait here
+//we are using .then and .error 
+connectToMongoDB()
+.then(() => {
+    app.listen(PORT, () => {
+        console.log('HTTP server is running at port 3001');
+    });
 })
+.catch((error) => {
+    console.error('Error connecting to mongodb, server exiting');
+    console.error(error);
+    process.exit(1);
+});
+
