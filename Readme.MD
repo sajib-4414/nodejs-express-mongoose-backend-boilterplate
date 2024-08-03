@@ -15,7 +15,7 @@ Look at the package.json to know which version is it.
 * nodemon for Hot loading
 * Mongoose ORM
 * Express Validator
-* Jest (TODO)
+* Jest
 * Express Async Errors to catch all thrown and unhandled errors
 * Docker (TODO)
 * Github Action Workflows (TODO)
@@ -58,15 +58,16 @@ All the types, hotloading packages should go into development only
 ```
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "ESNext",
     "rootDir": "./src",
-    "outDir": "./src",
+    "outDir": "./dist",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "moduleResolution": "node",
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }
 ```
 *   we will use nodemon for hot reloading in package.json.To run the project with nodemon, and ts-node, set a development command to run the project,
@@ -232,3 +233,37 @@ connectToMongoDB()
     process.exit(1);
 });
 ```
+
+### How to add testing
+* add this script to your package.json `"test": "cross-env NODE_ENV=test jest --detectOpenHandles --testTimeout=5000"`
+* install these dependencies,
+```
+dev dependencies
+"@types/jest": "^29.5.12",
+"@types/supertest": "^6.0.2",
+ "ts-jest": "^29.2.4",
+
+dependencies
+"supertest": "^7.0.0"
+"cross-env": "^7.0.3",
+"jest": "^29.7.0",
+```
+* create a jest configuration file such that jest can use ts-jest to run typescript directly
+jest.config.js in project root
+```
+export default {
+    preset: 'ts-jest',
+    testEnvironment: 'node',
+    transform: {
+      '^.+\\.ts?$': 'ts-jest',
+    },
+    globals: {
+      'ts-jest': {
+        tsconfig: 'tsconfig.json',
+      },
+    },
+};
+```
+* Create a folder called `tests` in source root. if your source folder is src, then tests
+can go inside the src folder. inside there create filename as `filename.test.ts`
+* checkout the `user.test.ts` file in the project to see example

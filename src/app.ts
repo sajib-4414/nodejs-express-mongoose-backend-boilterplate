@@ -5,8 +5,7 @@ require("express-async-errors");
 import express from 'express'
 import { globalErrorHandler } from './middlewares/error.middlware';
 import { authRouter } from './routers/auth.routes';
-import { connectToMongoDB } from './config/db';
-const app = express()
+export const app = express()
 
 //parse JSON request body, maximum payload limit is 16kb, otherwise will throw error
 app.use(express.json({limit:"16kb"}))
@@ -35,19 +34,5 @@ app.use('/api',router)
 //that intercept any error that happens in the request response cycle
 app.use(globalErrorHandler)
 
-const PORT = process.env.PORT || 3001;
 
-//this returns a promise. unless we are waiting with await, execution will not wait here
-//we are using .then and .error 
-connectToMongoDB()
-.then(() => {
-    app.listen(PORT, () => {
-        console.log('HTTP server is running at port 3001');
-    });
-})
-.catch((error) => {
-    console.error('Error connecting to mongodb, server exiting');
-    console.error(error);
-    process.exit(1);
-});
 

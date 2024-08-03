@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { login, register } from "../services/auth.services";
+import { IUser } from "../models/user.models";
 
 export const Register = async(req:Request, res:Response)=>{
     const {user,token} = await register(req.body)
@@ -20,3 +21,4 @@ export const Login = async(req:Request, res:Response)=>{
         token:token
     })
 }
+
